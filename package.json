@@ -32,6 +32,9 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "*.{js,ts,vue}": ["eslint --fix", "prettier --write"]
+    "*.{js,ts,vue}":[
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ]
   }
 }

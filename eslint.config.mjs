@@ -8,6 +8,7 @@ export default withNuxt(
       semi: ["error", "never"],
       quotes: ["error", "single"],
       "vue/multi-word-component-names": "off",
+      'prettier/prettier': 'off',
     },
   },
   prettier
