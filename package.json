@@ -8,6 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "pwa:assets": "pwa-assets-generator --preset minimal-2023 public/logo.svg",
     "lint": "eslint . --ext .ts,.vue",
     "lint:fix": "eslint . --ext .ts,.vue --fix",
     "prepare": "husky"
@@ -27,6 +28,8 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",
+    "@vite-pwa/assets-generator": "^1.0.1",
+    "@vite-pwa/nuxt": "^1.0.4",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.3",
