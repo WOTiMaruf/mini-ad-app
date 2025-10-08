@@ -7,15 +7,6 @@ export default defineNuxtConfig({
     port: 5173,
     host: "localhost",
   },
-  vite: {
-    server: {
-      hmr: {
-        host: "localhost",
-        port: 5173,
-        clientPort: 3000,
-      },
-    },
-  },
   routeRules: {
     "/": { redirect: "/requests" },
   },
