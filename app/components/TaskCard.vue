@@ -69,11 +69,11 @@ const deleteTask = () => {
       </div>
     </template>
 
-    <span class="font-bold text-2xl overflow-ellipsis whitespace-nowrap">
+    <span class="font-bold text-xl md:text-2xl overflow-ellipsis">
       {{ task.title }}
     </span>
 
-    <div class="grid grid-cols-2">
+    <div class="grid md:grid-cols-2 mt-3">
       <div class="flex items-center gap-x-1">
         <UIcon name="i-lucide-users-round" />
         <span class="overflow-ellipsis whitespace-nowrap">

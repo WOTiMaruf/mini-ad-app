@@ -13,7 +13,14 @@ const tasks = computed(() => {
 <template>
   <UContainer>
     <div class="flex justify-between">
-      <p class="font-medium">All tasks</p>
+      <div class="font-medium">
+        <span>All tasks</span>
+        <UBadge
+          :label="tasks.length"
+          variant="soft"
+          class="rounded-full ml-1"
+        />
+      </div>
 
       <TaskOrderBtn />
     </div>
