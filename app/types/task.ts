@@ -1,7 +1,7 @@
 import type { Task } from "#shared/types/task";
 
 export interface LocalTask extends Task {
-  isAccepted?: boolean;
+  isAccepted: boolean;
 }
 
 export interface TaskFilter {

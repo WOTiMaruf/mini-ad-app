@@ -6,7 +6,7 @@ import type {
   DummyPostsResponse,
 } from "#shared/types/dummyjson";
 
-const LIFE_TIME_CACHE_IN_SECONDS = 60 * 15;
+const LIFE_TIME_CACHE_IN_SECONDS = 15 * 60;
 
 export default defineCachedEventHandler(
   async (): Promise<Task[]> => {
