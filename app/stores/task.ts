@@ -1,4 +1,5 @@
-import type { LocalTask } from "@/types/task";
+import type { LocalTask, TaskFilter, TaskSortByKeys } from "@/types/task";
+import { TASK_SEARCH_BY_KEYS } from "@/types/task";
 import type { Task } from "#shared/types/task";
 
 import { defineStore } from "pinia";
@@ -9,18 +10,55 @@ import { useTasksIndexDb } from "@/composables/useTasksIndexDb";
 export const useTasksStore = defineStore("tasks", {
   state: () => ({
     tasks: [] as LocalTask[],
+
+    db: useTasksIndexDb(),
     isPending: false,
     isInit: false,
     error: null as Error | null,
-    db: useTasksIndexDb(),
+
+    filters: {
+      search: "",
+      sortBy: "title",
+      sortOrder: "asc",
+    } as TaskFilter,
   }),
 
   getters: {
+    getTasks: (state): LocalTask[] => state.tasks,
+
     getAcceptedTasks: (state) => (): LocalTask[] =>
       state.tasks.filter((task) => task.isAccepted),
     getUnAcceptedTasks: (state) => (): LocalTask[] =>
       state.tasks.filter((task) => !task.isAccepted),
-    getTasks: (state): LocalTask[] => state.tasks,
+
+    getFilteredTasks:
+      (state) =>
+      (list?: LocalTask[]): LocalTask[] => {
+        let data = [...state.tasks];
+        if (list) data = list;
+
+        if (state.filters.search) {
+          const search = state.filters.search.toLowerCase();
+
+          data = data.filter((task) =>
+            TASK_SEARCH_BY_KEYS.some((key) =>
+              task[key].toLowerCase().includes(search),
+            ),
+          );
+        }
+
+        if (state.filters.sortBy) {
+          const order = state.filters.sortOrder === "desc" ? -1 : 1;
+
+          data.sort((a, b) =>
+            a[state.filters.sortBy!] > b[state.filters.sortBy!]
+              ? order
+              : -order,
+          );
+        }
+
+        return data;
+      },
   },
 
   actions: {
@@ -54,17 +92,34 @@ export const useTasksStore = defineStore("tasks", {
 
       try {
         const tasks = await $fetch<Task[]>("/api/tasks");
-        const localTasks: LocalTask[] = tasks.map((task) => ({
-          ...task,
-          isAccepted: false,
-        }));
-        this.db.saveAll(localTasks);
+        this.db.saveAll(tasks);
       } catch (error) {
         this.error = error as Error;
       } finally {
         this.tasks = await this.db.getAll();
         this.isPending = false;
       }
+    },
+
+    setSearchFilter(value: string) {
+      this.filters.search = value;
+    },
+
+    setSortByFilter(value: TaskSortByKeys) {
+      this.filters.sortBy = value;
+    },
+
+    toggleSortOrder() {
+      this.filters.sortOrder =
+        this.filters.sortOrder === "asc" ? "desc" : "asc";
+    },
+
+    resetFilters() {
+      this.filters = {
+        search: "",
+        sortBy: "title",
+        sortOrder: "asc",
+      };
     },
   },
 });

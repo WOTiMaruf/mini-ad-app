@@ -9,15 +9,12 @@ export function useTasksIndexDb() {
     },
   });
 
-  async function saveAll(tasks: LocalTask[]) {
+  async function saveAll(tasks: Task[]) {
     const database = await databasePromise;
     const transaction = database.transaction("tasks", "readwrite");
 
     for (const task of tasks)
-      transaction.store.put({
-        ...task,
-        isAccepted: task.isAccepted.toString() ?? "false",
-      });
+      transaction.store.put({ ...task, isAccepted: "false" });
     await transaction.done;
   }
 
@@ -31,7 +28,12 @@ export function useTasksIndexDb() {
 
   async function getAll(): Promise<LocalTask[]> {
     const database = await databasePromise;
-    return database.getAll("tasks");
+    const tasks = await database.getAll("tasks");
+
+    return tasks.map((task) => ({
+      ...task,
+      isAccepted: task.isAccepted === "true",
+    }));
   }
 
   async function getTasksByAccepted(isAccepted: boolean): Promise<LocalTask[]> {

@@ -5,7 +5,17 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   devServer: {
     port: 5173,
-    host: "localhost",
+    host: "0.0.0.0",
+  },
+  vite: {
+    server: {
+      hmr: {
+        host: "localhost",
+        port: 5173,
+        protocol: "ws",
+        // clientPort: 5173,
+      },
+    },
   },
   routeRules: {
     "/": { redirect: "/requests" },
